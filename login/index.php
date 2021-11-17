@@ -1,26 +1,17 @@
 <?php
 
-include '../database/database.php';
+include '../controller.php';
 
 session_start();
 
-if (isset($_SESSION['user_id'])) {
-  header('Location: ../');
-  exit;
-}
+redirect('../', isset($_SESSION['user_id']));
 
 $dataError = false;
 $result = null;
 
 if (isset($_POST['login'])) {
-  $result = enter($_POST['username'], $_POST['password']);
-  if (gettype($result) === 'boolean') {
-    $_SESSION['user_id'] = get_id_by_username($_POST['username']);
-    header('Location: ../');
-    exit;
-  } else {
-    $dataError = true;
-  }
+  $result = login($_POST['username'], $_POST['password']);
+  $dataError = true;
 }
 
 ?>

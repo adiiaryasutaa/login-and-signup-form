@@ -1,26 +1,19 @@
 <?php
 
-include '../database/database.php';
+include '../controller.php';
 
 session_start();
-
-if (isset($_SESSION['user_id'])) {
-  header('Location: ../');
-  exit;
-}
 
 $validationError = false;
 $result = null;
 
+redirect('../', isset($_SESSION['user_id']));
+
 if (isset($_POST['signup'])) {
 
-  $result = register($_POST);
+  $result = register($_POST['email'], $_POST['username'], $_POST['password'], $_POST['conf_password']);
 
-  if ($result === 'success') {
-    $_SESSION['user_id'] = get_id_by_username($_POST['username']);
-    header('Location: ../');
-    exit;
-  } else if ($result === 'failed') {
+  if ($result === StatusMessage::FAILED) {
     echo 'Database error';
   } else {
     $validationError = true;
